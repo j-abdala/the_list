@@ -4,13 +4,15 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class TheListTile extends StatelessWidget {
   final String itemName;
   final bool itemCompleted;
+  final String categoryName;
   Function(bool?)? onChanged;
   Function(BuildContext)? archieveFunction;
 
   TheListTile({
     super.key, 
     required this.itemName, 
-    required this.itemCompleted, 
+    required this.itemCompleted,
+    required this.categoryName, 
     required this.onChanged,
     required this.archieveFunction
     });
@@ -25,9 +27,9 @@ class TheListTile extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: archieveFunction,
-              icon: Icons.assignment_outlined,
+              icon: Icons.delete_forever,
               backgroundColor: Colors.red.shade800,
-              borderRadius: BorderRadius.circular(5),)
+              borderRadius: BorderRadius.circular(5))
           ]),
         child: Container(
           padding: const EdgeInsets.all(15),

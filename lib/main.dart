@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:the_list/pages/home.dart';
+import 'package:the_list/pages/home_page.dart';
+import 'package:the_list/utilities/thelistcategory_tile.dart';
 
 
 void main() async{
@@ -21,6 +22,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
+      routes: {
+        '/homepage': (context) => HomePage()
+      },
       theme: ThemeData(
         // TODO: change the colors so it looks nice
         primaryColor: Colors.grey[700],

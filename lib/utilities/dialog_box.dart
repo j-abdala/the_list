@@ -33,7 +33,6 @@ class DialogBox extends StatelessWidget {
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                   hintText: "Add new Item",
                 ),
-                
               ),
             ),
             Padding(

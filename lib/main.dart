@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
           seedColor: Colors.black,
           primary: Color(0xff1E1E2F), // this is the background color
           secondary: Color(0xff2B2B3C), // this is for the appbar color
-          tertiary: Color(0xffFF6F61) // this is for the add button and dialog box
+          tertiary: Color(0xffFF6F61), // this is for the add button and dialog box'
         ),
         textTheme: Theme.of(context).textTheme.apply(
           displayColor: Color(0xffeaeaea),

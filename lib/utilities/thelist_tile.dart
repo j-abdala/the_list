@@ -43,8 +43,13 @@ class TheListTile extends StatelessWidget {
               Checkbox(
                 value: itemCompleted, 
                 onChanged: onChanged,
-                activeColor: Theme.of(context).colorScheme.tertiary),
-              
+                checkColor: Theme.of(context).iconTheme.color,
+                activeColor: Theme.of(context).colorScheme.secondary,
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: 1
+                ),
+              ),
               // task name
               Text(
                 itemName,

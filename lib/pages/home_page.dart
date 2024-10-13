@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   final _controller = TextEditingController();
 
   // save new category
+  // TODO: add a way to check if there is nothing in the text box
   void saveNewCategory() {
     setState(() {
       db.categoryList.add(_controller.text);
@@ -58,6 +59,17 @@ class _HomePageState extends State<HomePage> {
     db.updateDatabase();
   }
 
+  // TODO: add icons to the categories
+  
+  // List of icons to add
+  // House
+  // Car
+  // Task / Assignment
+  //
+
+  // TODO: add a way to delete items that are in a deleted category
+
+  // TODO: add a way to archieve items and/or categories
   @override
   Widget build(BuildContext context) {
     return Scaffold(

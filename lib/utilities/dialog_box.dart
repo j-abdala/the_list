@@ -17,7 +17,7 @@ class DialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.amber[900],
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       content: SizedBox(
         height: 150,
         child: Column(
@@ -29,9 +29,7 @@ class DialogBox extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey, width: 0)),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                  hintText: "Add new Item",
+                  hintText: 'Add new item',
                 ),
               ),
             ),

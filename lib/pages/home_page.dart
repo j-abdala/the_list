@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:the_list/data/database.dart';
 import 'package:the_list/utilities/dialog_box.dart';
-import 'package:the_list/utilities/thelist_tile.dart';
 import 'package:the_list/utilities/thelistcategory_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +18,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    db.loadData();
+    if (db.itemsList.isNotEmpty){
+      db.loadData();
+    }
+    
     super.initState();
   }
 
@@ -59,23 +61,21 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: AppBar(backgroundColor: Theme.of(context).primaryColorDark,
-        iconTheme: IconThemeData(
-          color: Colors.white
-        ),
-        centerTitle: true,
-        title: Text('The List', 
-          style: Theme.of(context).textTheme.displaySmall
-        ),
+        child: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          centerTitle: true,
+          title: Text('The List', 
+            style: Theme.of(context).textTheme.displaySmall
+          ),
         elevation: 0),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: createNewCategory,
-        backgroundColor: Colors.amber[900],
-        child: const Icon(Icons.add, color: Colors.white,)),
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        child: const Icon(Icons.add)),
       body: db.categoryList.isEmpty ? Center(child: Text('Create a new category')) : ListView.builder(
         itemCount: db.categoryList.length,
         itemBuilder: (context, index) {

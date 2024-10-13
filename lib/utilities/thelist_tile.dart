@@ -34,7 +34,7 @@ class TheListTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            color: Colors.amber[900],
+            color: Theme.of(context).colorScheme.tertiary,
             borderRadius: BorderRadius.circular(5)
           ),
           child: Row(
@@ -43,7 +43,7 @@ class TheListTile extends StatelessWidget {
               Checkbox(
                 value: itemCompleted, 
                 onChanged: onChanged,
-                activeColor: Colors.grey[600]),
+                activeColor: Theme.of(context).colorScheme.tertiary),
               
               // task name
               Text(

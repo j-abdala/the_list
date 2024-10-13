@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:the_list/pages/home_page.dart';
-import 'package:the_list/utilities/thelistcategory_tile.dart';
 
 
 void main() async{
@@ -27,12 +26,29 @@ class MainApp extends StatelessWidget {
       },
       theme: ThemeData(
         // TODO: change the colors so it looks nice
-        primaryColor: Colors.grey[700],
-        primaryColorDark: Colors.grey[850],
-        primaryColorLight: Colors.white,
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.dark,
+          seedColor: Colors.black,
+          primary: Color(0xff1E1E2F), // this is the background color
+          secondary: Color(0xff2B2B3C), // this is for the appbar color
+          tertiary: Color(0xffFF6F61) // this is for the add button and dialog box
+        ),
         textTheme: Theme.of(context).textTheme.apply(
-          displayColor: Colors.white,
-          bodyColor: Colors.white
+          displayColor: Color(0xffeaeaea),
+          bodyColor: Color(0xffeaeaea)
+        ),
+        iconTheme: IconThemeData(
+          color: Color(0xffeaeaea)
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(),
+          labelStyle: TextStyle(
+            color: Color(0xffeaeaea)
+          ),
+          hintStyle: TextStyle(
+            color: Color(0xffeaeaea)
+          )
         )
       ),
     );

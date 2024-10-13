@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:the_list/data/database.dart';
 import 'package:the_list/pages/categories_page.dart';
-import 'package:the_list/utilities/dialog_box.dart';
-import 'package:the_list/utilities/thelist_tile.dart';
 
 class TheListCategoryTile extends StatelessWidget {
   final String categoryName;
@@ -36,7 +33,7 @@ class TheListCategoryTile extends StatelessWidget {
             height: 70,
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.amber[900],
+              color: Theme.of(context).colorScheme.tertiary,
               borderRadius: BorderRadius.circular(5)
             ),
             child: Text(categoryName),

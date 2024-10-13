@@ -28,7 +28,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   @override
   void initState() {
-    db.loadData();
+    if (db.itemsList.isNotEmpty) {
+      db.loadData();
+    }
     checkItemsCategory();
     super.initState();
   }
@@ -37,11 +39,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
     print(db.itemsList);
     if (db.itemsList.isNotEmpty) {
       itemsInCategory = [];
-        db.itemsList.forEach((element) {
+        for (var element in db.itemsList) {
           if (element[2] == widget.categoryName) {
             itemsInCategory.add(element);
           }
-        });
+        }
       }
   }
   
@@ -76,9 +78,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
     );
   }
 
-  void deleteItem(int index) {
+  // TODO: figure out how to delete at the db.itemsList
+  void deleteItem(int index, String iName) {
     setState(() {
-      db.categoryList.removeAt(index);
+      for (var element in db.itemsList) {
+        if (element[0] == iName) {
+          db.itemsList.removeAt(index);
+          itemsInCategory.removeAt(index);
+        }
+      }
     });
     db.updateDatabase();
   }
@@ -86,10 +94,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: AppBar(backgroundColor: Theme.of(context).primaryColorDark,
+        child: AppBar(backgroundColor: Theme.of(context).colorScheme.secondary,
         iconTheme: IconThemeData(
           color: Colors.white
         ),
@@ -101,9 +109,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: createNewItem,
-        backgroundColor: Colors.amber[900],
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
         child: const Icon(Icons.add, color: Colors.white,)),
-      body: db.itemsList.isEmpty ? Center(child: Text('Create a new items')) : ListView.builder(
+      body: itemsInCategory.isEmpty ? Center(child: Text('Create a new items')) : ListView.builder(
         itemCount: itemsInCategory.length,
         itemBuilder: (context, index) {
           return TheListTile(
@@ -111,7 +119,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             itemCompleted: itemsInCategory[index][1],
             categoryName: itemsInCategory[index][2],
             onChanged: (value) => checkBoxChanged(value, index),
-            archieveFunction: (context) => deleteItem(index),
+            archieveFunction: (context) => deleteItem(index, itemsInCategory[index][2]),
           );
         }
       )

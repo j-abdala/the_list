@@ -18,25 +18,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    if (db.itemsList.isNotEmpty){
-      db.loadData();
-    }
-    
+    db.loadData();
+
     super.initState();
   }
 
   // text controller
   final _controller = TextEditingController();
-
+  
   // save new category
-  // TODO: add a way to check if there is nothing in the text box
   void saveNewCategory() {
-    setState(() {
-      db.categoryList.add(_controller.text);
-      _controller.clear();
-    });
-    Navigator.of(context).pop();
-    db.updateDatabase();
+    if (_controller.text != "") {
+      setState(() {
+        db.categoryList.add([_controller.text, dropDownValue.getString()]);
+        print(dropDownValue.getString());
+        _controller.clear();
+      });
+      Navigator.of(context).pop();
+      db.updateDatabase();
+    }
   }
 
   // create new category
@@ -46,36 +46,40 @@ class _HomePageState extends State<HomePage> {
       builder: (context) {
         return DialogBox(
           controller: _controller,
+          labelName: 'Category',
           onSave: saveNewCategory,
-          onCancel: () => Navigator.of(context).pop(),
+          onCancel: () => {
+            Navigator.of(context).pop(),
+            _controller.clear()
+          },
         );
-      });
+      }
+    );
   }
 
-  void deleteCategory(int index) {
+  void deleteCategory(int index, String iName) {
+    List toRemove = [];
     setState(() {
+      db.itemsList.forEach((element) {
+        if (element[2] == db.categoryList[index]) {
+          toRemove.add(element);
+        }
+      });
       db.categoryList.removeAt(index);
     });
     db.updateDatabase();
   }
 
-  // TODO: add icons to the categories
-  
-  // List of icons to add
-  // House
-  // Car
-  // Task / Assignment
-  //
+  // TODO: add due dates for items
 
-  // TODO: add a way to delete items that are in a deleted category
+  // TODO: sharing function
 
-  // TODO: add a way to archieve items and/or categories
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: Size.fromHeight(70),
         child: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
           centerTitle: true,
@@ -92,9 +96,11 @@ class _HomePageState extends State<HomePage> {
         itemCount: db.categoryList.length,
         itemBuilder: (context, index) {
           return TheListCategoryTile(
-            categoryName: db.categoryList[index], 
-            deleteFunction: (context) => deleteCategory(index));
-        })
+            categoryName: db.categoryList[index][0], 
+            categoryIcon: db.categoryList[index][1],
+            deleteFunction: (context) => deleteCategory(index, db.categoryList[index][0]));
+        }
+      )
     );
   }
 }

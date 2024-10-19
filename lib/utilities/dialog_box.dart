@@ -1,52 +1,311 @@
 import 'package:flutter/material.dart';
 import 'package:the_list/utilities/button.dart';
 
-class DialogBox extends StatelessWidget {
+class DialogBox extends StatefulWidget {
   final controller;
+  final _formKey = GlobalKey<FormState>();
+  final String labelName;
   VoidCallback onSave;
   VoidCallback onCancel;
 
   DialogBox({
     super.key, 
     required this.controller,
+    required this.labelName,
     required this.onSave,
     required this.onCancel
     });
 
+  @override
+  State<DialogBox> createState() => _DialogBoxState();
+}
+
+class dropDownValue {
+  static String ddValue = 'not_interested';
+  static void setString(String newValue) {
+    ddValue = newValue;
+    }
+
+  static String getString() {
+    return ddValue;
+  }
+}
+
+class getDateValue {
+  static DateTime? getDate() {
+    if (dateController.text.isNotEmpty) {
+      return DateTime.parse(dateController.toString());
+    } else {
+      return null;
+    }
+  }
+}
+
+TextEditingController dateController = TextEditingController();
+
+
+class _DialogBoxState extends State<DialogBox> {
+  String currentOption = 'not_interested'; 
+
+  bool isEnabled = false;
+
+  Future<void> selectDate() async{
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year), 
+      lastDate: DateTime(2100),
+      builder: (context, child) => Theme(
+        data: ThemeData().copyWith(
+          colorScheme: ColorScheme.dark(
+            primary: Color(0xffFF6F61),
+            surface: Color(0xff2B2B3C)
+          ),
+          datePickerTheme: DatePickerThemeData(
+            cancelButtonStyle: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Color(0xffFF6F61)),
+              foregroundColor: WidgetStatePropertyAll(Color(0xffeaeaea))
+            ),
+            confirmButtonStyle: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Color(0xffFF6F61)),
+              foregroundColor: WidgetStatePropertyAll(Color(0xffeaeaea))
+            ),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+
+          )),
+        child: child!,)
+    );
+
+    if (picked != null) {
+      setState(() {
+        dateController.text = picked.toString().split(" ")[0];
+      });
+    }
+  }
+
+  void onChanged() {
+    setState(() {
+      if (isEnabled == false) {
+        isEnabled = true;
+      } else {
+        isEnabled = false;
+      }  
+    }); 
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.tertiary,
-      content: SizedBox(
-        height: 150,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // get user input
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: TextField(
-                controller: controller,
-                decoration: const InputDecoration(
-                  hintText: 'Add new item',
+      content: Form(
+        key: widget._formKey,
+        child: SizedBox(
+          height: 300,//widget.labelName == 'Category' ? 350 : 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Text(
+              //   widget.labelName == 'Category' ? 'Create a new category' : 'Create a new item', 
+              //   style: Theme.of(context).textTheme.headlineMedium),
+              // get user input
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                  child: TextFormField(
+                    validator: (value) => value == "" ? 'The name of the ${widget.labelName} cannot be empty' : null,
+                    controller: widget.controller,
+                    decoration: InputDecoration(
+                      labelText: '${widget.labelName} Name',
+                      hintText: 'Add new ${widget.labelName}'
+                    ),
+                  ),
+              ),
+              if (widget.labelName == 'Category') ...[
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButtonFormField(
+                    value: currentOption,
+                    isExpanded: true,
+                    menuMaxHeight: 200,
+                    decoration: InputDecoration(
+                      label: Text('Select an icon')
+                    ),
+                    dropdownColor: Theme.of(context).colorScheme.primary,
+                    onChanged: (String? newOption) {
+                      setState(() {
+                        currentOption = newOption!;
+                        dropDownValue.setString(currentOption);
+                      });
+                    },
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'not_interested',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.not_interested),
+                            ),
+                            Text('None')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'house',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.house),
+                            ),
+                            Text('House')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'shopping_cart',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.shopping_cart),
+                            ),
+                            Text('Shopping Cart')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'shopping_bag_rounded',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.shopping_bag_rounded),
+                            ),
+                            Text('Shopping Bag')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'car_repair',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.car_repair),
+                            ),
+                            Text('Car')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'pets',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.pets),
+                            ),
+                            Text('Pet')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'assignment',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.assignment),
+                            ),
+                            Text('Assignment')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'task',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.task),
+                            ),
+                            Text('Task')
+                          ],
+                        )
+                      ),
+                      DropdownMenuItem(
+                        value: 'cleaning_services',
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.cleaning_services),
+                            ),
+                            Text('Cleaning')
+                          ],
+                        )
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // save button
-                  Button(text: "Save", onPressed: onSave),
-                  // cancel button
-                  Button(text: "Cancel", onPressed: onCancel)
-                ],
-              ),
-            )
-          ],
-        )
+              ] else if (widget.labelName == 'Item') ...[
+                //calendar
+                Row(
+                  children: [
+                    Text(
+                      'Has due date', 
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 16,
+                      )),
+                    Checkbox(
+                      value: isEnabled,
+                      onChanged: (value) {
+                        onChanged();
+                      },
+                      checkColor: Color(0xffeaeaea),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 1
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: TextField(
+                    controller: dateController,
+                    decoration: InputDecoration(
+                      labelText: 'Due Date',
+                      prefixIcon: Icon(
+                        Icons.calendar_today, 
+                        color: Theme.of(context).colorScheme.primary
+                        ),
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder()
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      selectDate();
+                    },
+                  ),
+                )
+              ],
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // save button
+                    Button(text: "Save", onPressed: widget.onSave),
+                    // cancel button
+                    Button(text: "Cancel", onPressed: widget.onCancel)
+                  ],
+                ),
+              )
+            ],
+          )
+        ),
       )
     );
   }

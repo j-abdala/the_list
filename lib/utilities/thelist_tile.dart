@@ -3,18 +3,20 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TheListTile extends StatelessWidget {
   final String itemName;
+  final DateTime? dueDate;
   final bool itemCompleted;
   final String categoryName;
   Function(bool?)? onChanged;
-  Function(BuildContext)? archieveFunction;
+  Function(BuildContext)? deleteFunction;
 
   TheListTile({
     super.key, 
     required this.itemName, 
+    required this.dueDate,
     required this.itemCompleted,
     required this.categoryName, 
     required this.onChanged,
-    required this.archieveFunction
+    required this.deleteFunction
     });
 
   @override
@@ -26,7 +28,7 @@ class TheListTile extends StatelessWidget {
           motion: const StretchMotion(), 
           children: [
             SlidableAction(
-              onPressed: archieveFunction,
+              onPressed: deleteFunction,
               icon: Icons.delete_forever,
               backgroundColor: Colors.red.shade800,
               borderRadius: BorderRadius.circular(5))
@@ -51,9 +53,18 @@ class TheListTile extends StatelessWidget {
                 ),
               ),
               // task name
-              Text(
-                itemName,
-                style: TextStyle(decoration: itemCompleted ? TextDecoration.lineThrough : TextDecoration.none))
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    // '$itemName \n $dueDate',
+                    dueDate == null ? itemName : '$itemName \n $dueDate',
+                    style: TextStyle(
+                      decoration: itemCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                      fontSize: 21,
+                      fontWeight: FontWeight.w400)),
+                ),
+              ),
             ],
           ),
         ),

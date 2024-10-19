@@ -25,7 +25,6 @@ class MainApp extends StatelessWidget {
         '/homepage': (context) => HomePage()
       },
       theme: ThemeData(
-        // TODO: change the colors so it looks nice
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
           seedColor: Colors.black,
@@ -44,12 +43,24 @@ class MainApp extends StatelessWidget {
           enabledBorder: OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(),
           labelStyle: TextStyle(
-            color: Color(0xffeaeaea)
+            color: Color(0xff1E1E2F)
           ),
           hintStyle: TextStyle(
-            color: Color(0xffeaeaea)
-          )
-        )
+            color: Color(0xffeaeaea).withOpacity(0.8),
+          ),
+        ),
+        datePickerTheme: DatePickerThemeData(
+          cancelButtonStyle: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Color(0xffFF6F61)),
+            foregroundColor: WidgetStatePropertyAll(Color(0xffeaeaea))
+          ),
+          confirmButtonStyle: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Color(0xffFF6F61)),
+            foregroundColor: WidgetStatePropertyAll(Color(0xffeaeaea))
+          ),
+          surfaceTintColor: Colors.transparent,
+          todayBackgroundColor: WidgetStatePropertyAll(Color(0xffFF6F61)),
+        ),
       ),
     );
   }

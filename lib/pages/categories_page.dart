@@ -28,35 +28,33 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   @override
   void initState() {
-    if (db.itemsList.isNotEmpty) {
-      db.loadData();
-    }
+    db.loadData();
+
     checkItemsCategory();
+
     super.initState();
   }
 
   void checkItemsCategory() {
-    print(db.itemsList);
-    if (db.itemsList.isNotEmpty) {
-      itemsInCategory = [];
-        for (var element in db.itemsList) {
-          if (element[2] == widget.categoryName) {
-            itemsInCategory.add(element);
-          }
-        }
+    itemsInCategory = [];
+    for (var element in db.itemsList) {
+      if (element[2] == widget.categoryName) {
+        itemsInCategory.add(element);
       }
+    }
   }
-  
 
   // save the new item 
   void saveNewItem() {
-    setState(() {
-      db.itemsList.add([_controller.text, false, widget.categoryName]);
-      _controller.clear();
-    });
-    Navigator.of(context).pop();
+    if (_controller.text != ""){
+      setState(() {
+        db.itemsList.add([_controller.text, false, widget.categoryName, getDateValue.getDate()]);
+        _controller.clear();
+      });
+      Navigator.of(context).pop();
+      checkItemsCategory();
+    }
     db.updateDatabase();
-    checkItemsCategory();
   }
 
   void checkBoxChanged(bool? value, int index) {
@@ -72,31 +70,35 @@ class _CategoriesPageState extends State<CategoriesPage> {
       builder: (context) {
         return DialogBox(
           controller: _controller,
+          labelName: 'Item',
           onSave: saveNewItem,
           onCancel: () => Navigator.of(context).pop());
       }
     );
   }
 
-  // TODO: figure out how to delete at the db.itemsList
-  void deleteItem(int index, String iName) {
+  void deleteItem(int index, String cName, String iName) {
+    List toRemove = [];
     setState(() {
-      for (var element in db.itemsList) {
-        if (element[0] == iName) {
-          db.itemsList.removeAt(index);
-          itemsInCategory.removeAt(index);
+      db.itemsList.forEach((element) {
+        if (element[2] == cName && element[0] == iName) {
+          toRemove.add(element);
         }
-      }
+      });
+      db.itemsList.removeWhere((e) => e[0] == iName && e[2] == cName);
+      itemsInCategory.removeAt(index);
     });
     db.updateDatabase();
   }
+
+  // TODO: check if the value being returned is empty
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: Size.fromHeight(70),
         child: AppBar(backgroundColor: Theme.of(context).colorScheme.secondary,
         iconTheme: IconThemeData(
           color: Colors.white
@@ -116,10 +118,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
         itemBuilder: (context, index) {
           return TheListTile(
             itemName: itemsInCategory[index][0],
+            dueDate: itemsInCategory[index][3],
             itemCompleted: itemsInCategory[index][1],
             categoryName: itemsInCategory[index][2],
             onChanged: (value) => checkBoxChanged(value, index),
-            archieveFunction: (context) => deleteItem(index, itemsInCategory[index][2]),
+            deleteFunction: (context) => deleteItem(index, itemsInCategory[index][2], itemsInCategory[index][0]),
           );
         }
       )

@@ -72,7 +72,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
           controller: _controller,
           labelName: 'Item',
           onSave: saveNewItem,
-          onCancel: () => Navigator.of(context).pop());
+          onCancel: () {
+            Navigator.of(context).pop();
+            _controller.clear();
+            dateController.clear();
+          }
+        );
       }
     );
   }

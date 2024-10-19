@@ -56,13 +56,29 @@ class TheListTile extends StatelessWidget {
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    // '$itemName \n $dueDate',
-                    dueDate == null ? itemName : '$itemName \n $dueDate',
-                    style: TextStyle(
-                      decoration: itemCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-                      fontSize: 21,
-                      fontWeight: FontWeight.w400)),
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        decoration: itemCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                        fontSize: 21,
+                        fontWeight: FontWeight.w400),
+                      children: [
+                        if (dueDate == null) ...[
+                          TextSpan(text: itemName)
+                        ] else ...[
+                          TextSpan(text: '$itemName\n'),
+                          TextSpan(
+                            text: 'Due: ${dueDate.toString().split(" ")[0]}',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 18
+                            )
+                          )
+                        ]
+                        //dueDate == null ? itemName : '$itemName\nDue: ${dueDate.toString().split(" ")[0]}',
+                      ]
+                    ),
+                  ),
                 ),
               ),
             ],

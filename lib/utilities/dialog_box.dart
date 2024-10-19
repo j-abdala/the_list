@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:the_list/utilities/button.dart';
 
 class DialogBox extends StatefulWidget {
@@ -22,6 +23,7 @@ class DialogBox extends StatefulWidget {
 
 class dropDownValue {
   static String ddValue = 'not_interested';
+  
   static void setString(String newValue) {
     ddValue = newValue;
     }
@@ -34,7 +36,7 @@ class dropDownValue {
 class getDateValue {
   static DateTime? getDate() {
     if (dateController.text.isNotEmpty) {
-      return DateTime.parse(dateController.toString());
+      return DateFormat('yyyy-MM-dd').parse(dateController.text);
     } else {
       return null;
     }
@@ -42,7 +44,6 @@ class getDateValue {
 }
 
 TextEditingController dateController = TextEditingController();
-
 
 class _DialogBoxState extends State<DialogBox> {
   String currentOption = 'not_interested'; 
@@ -100,7 +101,8 @@ class _DialogBoxState extends State<DialogBox> {
       content: Form(
         key: widget._formKey,
         child: SizedBox(
-          height: 300,//widget.labelName == 'Category' ? 350 : 200,
+          width: 200,
+          height: widget.labelName == 'Category' ? 350 : isEnabled == true ? 330 : 250,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -253,7 +255,7 @@ class _DialogBoxState extends State<DialogBox> {
                 Row(
                   children: [
                     Text(
-                      'Has due date', 
+                      'Add due date', 
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 16,
@@ -271,25 +273,27 @@ class _DialogBoxState extends State<DialogBox> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextField(
-                    controller: dateController,
-                    decoration: InputDecoration(
-                      labelText: 'Due Date',
-                      prefixIcon: Icon(
-                        Icons.calendar_today, 
-                        color: Theme.of(context).colorScheme.primary
-                        ),
-                      enabledBorder: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder()
+                if (isEnabled == true) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextField(
+                      controller: dateController,
+                      decoration: InputDecoration(
+                        labelText: 'Due Date',
+                        prefixIcon: Icon(
+                          Icons.calendar_today, 
+                          color: Theme.of(context).colorScheme.primary
+                          ),
+                        enabledBorder: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder()
+                      ),
+                      readOnly: true,
+                      onTap: () {
+                        selectDate();
+                      },
                     ),
-                    readOnly: true,
-                    onTap: () {
-                      selectDate();
-                    },
-                  ),
-                )
+                  )
+                ]
               ],
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),

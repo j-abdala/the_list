@@ -72,6 +72,8 @@ class _HomePageState extends State<HomePage> {
 
   // TODO: add due dates for items
 
+  // TODO: check database if there is already an existing item / category
+
   // TODO: sharing function
 
   @override

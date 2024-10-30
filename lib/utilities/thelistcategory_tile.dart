@@ -40,7 +40,7 @@ class TheListCategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 23, right: 23, top: 20),
+      padding: const EdgeInsets.only(left: 23, right: 23, bottom: 20),
       child: Slidable(
         endActionPane: ActionPane(
           motion: const StretchMotion(), 

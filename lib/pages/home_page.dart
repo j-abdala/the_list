@@ -75,13 +75,13 @@ class _HomePageState extends State<HomePage> {
     NotificationService().showNotification(title: 'Test', body: 'test!');
     print('test');
   }
-  // TODO: check database if there is already an existing item / category
+  // TODO: check database if there is already an existing item / categoryn6
+  
+  // TODO: add a function to delete the categories items when deleting a category
 
   // TODO: add quantity
 
-  // TODO: change the splash screen
-
-  // TODO: change the app name and the icon logo
+  // TODO: request the user for permissions for notifications
 
   // TODO: sharing function
 
@@ -103,14 +103,17 @@ class _HomePageState extends State<HomePage> {
         onPressed: createNewCategory,
         backgroundColor: Theme.of(context).colorScheme.tertiary,
         child: const Icon(Icons.add)),
-      body: db.categoryList.isEmpty ? Center(child: Text('Create a new category')) : ListView.builder(
-        itemCount: db.categoryList.length,
-        itemBuilder: (context, index) {
-          return TheListCategoryTile(
-            categoryName: db.categoryList[index][0], 
-            categoryIcon: db.categoryList[index][1],
-            deleteFunction: (context) => deleteCategory(index, db.categoryList[index][0]));
-        }
+      body: db.categoryList.isEmpty ? Center(child: Text('Create a new category')) : Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: ListView.builder(
+          itemCount: db.categoryList.length,
+          itemBuilder: (context, index) {
+            return TheListCategoryTile(
+              categoryName: db.categoryList[index][0], 
+              categoryIcon: db.categoryList[index][1],
+              deleteFunction: (context) => deleteCategory(index, db.categoryList[index][0]));
+          }
+        ),
       )
     );
   }

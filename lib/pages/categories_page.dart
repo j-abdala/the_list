@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:the_list/data/database.dart';
+import 'package:the_list/services/notification_services.dart';
 import 'package:the_list/utilities/dialog_box.dart';
 import 'package:the_list/utilities/thelist_tile.dart';
 
@@ -26,6 +27,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
   // text controller
   final _controller = TextEditingController();
 
+  final NotificationService notificationScheduler = NotificationService();
+
   @override
   void initState() {
     db.loadData();
@@ -48,7 +51,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
   void saveNewItem() {
     if (_controller.text != ""){
       setState(() {
-        db.itemsList.add([_controller.text, false, widget.categoryName, getDateValue.getDate()]);
+        db.itemsList.add([_controller.text, false, widget.categoryName, GetDateValue.getDate()]);
+        if (GetDateValue.getDate() != null) {
+          // notificationScheduler.scheduleNotification(
+          //   title: 'The List',
+          //   body: '${_controller.text} Due date reminder!',
+          //   //scheduledNotificationDate: GetDateValue.getDate()!
+          //   scheduledNotificationDate: DateTime.now().add(Duration(seconds: 12)));
+          notificationScheduler.scheduleNotification(DateTime.now());
+        }
         _controller.clear();
       });
       Navigator.of(context).pop();
@@ -96,8 +107,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
     db.updateDatabase();
   }
 
-  // TODO: check if the value being returned is empty
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +127,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         onPressed: createNewItem,
         backgroundColor: Theme.of(context).colorScheme.tertiary,
         child: const Icon(Icons.add, color: Colors.white,)),
-      body: itemsInCategory.isEmpty ? Center(child: Text('Create a new items')) : ListView.builder(
+      body: itemsInCategory.isEmpty ? Center(child: Text('Create a new item')) : ListView.builder(
         itemCount: itemsInCategory.length,
         itemBuilder: (context, index) {
           return TheListTile(

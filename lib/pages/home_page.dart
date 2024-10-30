@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:the_list/data/database.dart';
 import 'package:the_list/utilities/dialog_box.dart';
 import 'package:the_list/utilities/thelistcategory_tile.dart';
+import 'package:the_list/services/notification_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,8 +31,8 @@ class _HomePageState extends State<HomePage> {
   void saveNewCategory() {
     if (_controller.text != "") {
       setState(() {
-        db.categoryList.add([_controller.text, dropDownValue.getString()]);
-        print(dropDownValue.getString());
+        db.categoryList.add([_controller.text, DropDownValue.getString()]);
+        print(DropDownValue.getString());
         _controller.clear();
       });
       Navigator.of(context).pop();
@@ -70,9 +71,17 @@ class _HomePageState extends State<HomePage> {
     db.updateDatabase();
   }
 
-  // TODO: add due dates for items
-
+  void testNotification() {
+    NotificationService().showNotification(title: 'Test', body: 'test!');
+    print('test');
+  }
   // TODO: check database if there is already an existing item / category
+
+  // TODO: add quantity
+
+  // TODO: change the splash screen
+
+  // TODO: change the app name and the icon logo
 
   // TODO: sharing function
 

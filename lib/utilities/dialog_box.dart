@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:the_list/services/notification_services.dart';
 import 'package:the_list/utilities/button.dart';
 
 class DialogBox extends StatefulWidget {
@@ -21,7 +22,7 @@ class DialogBox extends StatefulWidget {
   State<DialogBox> createState() => _DialogBoxState();
 }
 
-class dropDownValue {
+class DropDownValue {
   static String ddValue = 'not_interested';
   
   static void setString(String newValue) {
@@ -33,7 +34,7 @@ class dropDownValue {
   }
 }
 
-class getDateValue {
+class GetDateValue {
   static DateTime? getDate() {
     if (dateController.text.isNotEmpty) {
       return DateFormat('yyyy-MM-dd').parse(dateController.text);
@@ -135,7 +136,7 @@ class _DialogBoxState extends State<DialogBox> {
                     onChanged: (String? newOption) {
                       setState(() {
                         currentOption = newOption!;
-                        dropDownValue.setString(currentOption);
+                        DropDownValue.setString(currentOption);
                       });
                     },
                     items: const [

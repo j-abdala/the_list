@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:the_list/pages/home_page.dart';
+import 'package:the_list/services/notification_services.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
+  tz.initializeTimeZones();
+
   // initialize the hive
   await Hive.initFlutter();
 

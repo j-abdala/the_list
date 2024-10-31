@@ -32,6 +32,10 @@ class DropDownValue {
   static String getString() {
     return ddValue;
   }
+
+  static void resetString() {
+    ddValue = 'not_interested';
+  }
 }
 
 class GetDateValue {
@@ -73,16 +77,20 @@ class _DialogBoxState extends State<DialogBox> {
               foregroundColor: WidgetStatePropertyAll(Color(0xffeaeaea))
             ),
             backgroundColor: Theme.of(context).colorScheme.primary,
-
           )),
         child: child!,)
     );
 
-    if (picked != null) {
-      setState(() {
+    setState(() {
+      if (picked != null) {
         dateController.text = picked.toString().split(" ")[0];
-      });
-    }
+      } 
+      if (isEnabled == false) {
+        dateController.clear();
+        picked = null;
+      }
+    });
+    
   }
 
   void onChanged() {
@@ -91,6 +99,7 @@ class _DialogBoxState extends State<DialogBox> {
         isEnabled = true;
       } else {
         isEnabled = false;
+        dateController.clear();
       }  
     }); 
   }
@@ -114,11 +123,13 @@ class _DialogBoxState extends State<DialogBox> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                   child: TextFormField(
-                    validator: (value) => value == "" ? 'The name of the ${widget.labelName} cannot be empty' : null,
+                    validator: (value) => value == "" ? 'The name cannot be empty' : null,
+                    autovalidateMode: AutovalidateMode.always,
                     controller: widget.controller,
                     decoration: InputDecoration(
                       labelText: '${widget.labelName} Name',
-                      hintText: 'Add new ${widget.labelName}'
+                      hintText: 'Add new ${widget.labelName}',
+                      border: OutlineInputBorder()
                     ),
                   ),
               ),

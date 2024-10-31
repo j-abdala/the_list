@@ -28,7 +28,7 @@ class NotificationService {
     return const NotificationDetails(
         android: AndroidNotificationDetails(
           'channelId', 
-          'channelName',
+          'Reminder',
           importance: Importance.max),
         iOS: DarwinNotificationDetails());
   }
@@ -61,15 +61,15 @@ class NotificationService {
 
   Future<void> scheduleNotification(DateTime dueDate) async {
   // Set the time to midnight (00:00)
-  DateTime scheduledDate = DateTime(dueDate.year, dueDate.month, dueDate.day, dueDate.hour, dueDate.minute + 2);
-  
-  await notificationsPlugin.zonedSchedule(
-      0,
-      'Reminder!',
-      'You have a task due today!',
-      tz.TZDateTime.from(scheduledDate, tz.local),
-      notificationDetails(),
-      androidScheduleMode: AndroidScheduleMode.exact,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
-}
+    DateTime scheduledDate = DateTime(dueDate.year, dueDate.month, dueDate.day, dueDate.hour, dueDate.minute + 2);
+    
+    await notificationsPlugin.zonedSchedule(
+        0,
+        'Reminder!',
+        'You have a task due today!',
+        tz.TZDateTime.from(scheduledDate, tz.local),
+        notificationDetails(),
+        androidScheduleMode: AndroidScheduleMode.exact,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
+  }
 }

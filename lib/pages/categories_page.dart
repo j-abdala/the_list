@@ -61,6 +61,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           notificationScheduler.scheduleNotification(DateTime.now());
         }
         _controller.clear();
+        dateController.clear();
       });
       Navigator.of(context).pop();
       checkItemsCategory();

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:the_list/data/database.dart';
+import 'package:the_list/services/permission_services.dart';
 import 'package:the_list/utilities/dialog_box.dart';
 import 'package:the_list/utilities/thelistcategory_tile.dart';
 import 'package:the_list/services/notification_services.dart';
@@ -21,22 +24,36 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     db.loadData();
 
+    // this comes with flutter_local_notification
+    //AndroidFlutterLocalNotificationsPlugin().requestExactAlarmsPermission();
+
+    checkPermission(Permission.notification, context);
+
     super.initState();
   }
 
   // text controller
   final _controller = TextEditingController();
+
+  bool isValid = false;
   
   // save new category
   void saveNewCategory() {
-    if (_controller.text != "") {
-      setState(() {
-        db.categoryList.add([_controller.text, DropDownValue.getString()]);
-        print(DropDownValue.getString());
-        _controller.clear();
-      });
-      Navigator.of(context).pop();
-      db.updateDatabase();
+    if (db.categoryList.contains(_controller.text)) {
+      if (_controller.text != "") {
+        setState(() {
+          db.categoryList.add([_controller.text, DropDownValue.getString()]);
+          DropDownValue.resetString();
+          print(DropDownValue.getString());
+          _controller.clear();
+          dateController.clear();
+        });
+        Navigator.of(context).pop();
+        db.updateDatabase();
+        isValid = true;
+      }
+    } else {
+      isValid = false;
     }
   }
 
@@ -62,9 +79,12 @@ class _HomePageState extends State<HomePage> {
     List toRemove = [];
     setState(() {
       db.itemsList.forEach((element) {
-        if (element[2] == db.categoryList[index]) {
+        if (element[2] == db.categoryList[index][0]) {
           toRemove.add(element);
         }
+      });
+      toRemove.forEach((element) {
+        db.itemsList.removeWhere((item) => element[2] == item[2]);
       });
       db.categoryList.removeAt(index);
     });
@@ -75,13 +95,7 @@ class _HomePageState extends State<HomePage> {
     NotificationService().showNotification(title: 'Test', body: 'test!');
     print('test');
   }
-  // TODO: check database if there is already an existing item / categoryn6
-  
-  // TODO: add a function to delete the categories items when deleting a category
-
-  // TODO: add quantity
-
-  // TODO: request the user for permissions for notifications
+  // TODO: check database if there is already an existing item / category
 
   // TODO: sharing function
 

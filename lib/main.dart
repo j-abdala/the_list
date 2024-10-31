@@ -54,6 +54,8 @@ class MainApp extends StatelessWidget {
           hintStyle: TextStyle(
             color: Color(0xffeaeaea).withOpacity(0.8),
           ),
+          errorBorder: OutlineInputBorder(),
+          errorStyle: TextStyle(color: Color(0xff1E1E2F))
         ),
         datePickerTheme: DatePickerThemeData(
           cancelButtonStyle: ButtonStyle(

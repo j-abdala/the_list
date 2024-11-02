@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:the_list/data/database.dart';
@@ -35,25 +34,19 @@ class _HomePageState extends State<HomePage> {
   // text controller
   final _controller = TextEditingController();
 
-  bool isValid = false;
-  
   // save new category
   void saveNewCategory() {
-    if (db.categoryList.contains(_controller.text)) {
+    if (!db.categoryList.any((element) => element[0] == _controller.text)) {
       if (_controller.text != "") {
         setState(() {
           db.categoryList.add([_controller.text, DropDownValue.getString()]);
           DropDownValue.resetString();
-          print(DropDownValue.getString());
           _controller.clear();
           dateController.clear();
         });
         Navigator.of(context).pop();
         db.updateDatabase();
-        isValid = true;
       }
-    } else {
-      isValid = false;
     }
   }
 
@@ -65,6 +58,7 @@ class _HomePageState extends State<HomePage> {
         return DialogBox(
           controller: _controller,
           labelName: 'Category',
+          cName: null,
           onSave: saveNewCategory,
           onCancel: () => {
             Navigator.of(context).pop(),
@@ -95,7 +89,6 @@ class _HomePageState extends State<HomePage> {
     NotificationService().showNotification(title: 'Test', body: 'test!');
     print('test');
   }
-  // TODO: check database if there is already an existing item / category
 
   // TODO: sharing function
 
@@ -123,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           itemCount: db.categoryList.length,
           itemBuilder: (context, index) {
             return TheListCategoryTile(
-              categoryName: db.categoryList[index][0], 
+              categoryName: db.categoryList[index][0],
               categoryIcon: db.categoryList[index][1],
               deleteFunction: (context) => deleteCategory(index, db.categoryList[index][0]));
           }

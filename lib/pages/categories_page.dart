@@ -83,6 +83,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         return DialogBox(
           controller: _controller,
           labelName: 'Item',
+          cName: widget.categoryName,
           onSave: saveNewItem,
           onCancel: () {
             Navigator.of(context).pop();

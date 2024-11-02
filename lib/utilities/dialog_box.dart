@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:the_list/services/notification_services.dart';
+import 'package:the_list/data/database.dart';
 import 'package:the_list/utilities/button.dart';
+import 'package:collection/collection.dart';
+
+final _formKey = GlobalKey<FormState>();
 
 class DialogBox extends StatefulWidget {
   final controller;
-  final _formKey = GlobalKey<FormState>();
+  final String? cName;
   final String labelName;
   VoidCallback onSave;
   VoidCallback onCancel;
@@ -14,6 +18,7 @@ class DialogBox extends StatefulWidget {
     super.key, 
     required this.controller,
     required this.labelName,
+    required this.cName,
     required this.onSave,
     required this.onCancel
     });
@@ -51,6 +56,16 @@ class GetDateValue {
 TextEditingController dateController = TextEditingController();
 
 class _DialogBoxState extends State<DialogBox> {
+  void initState() {
+    db.loadData();
+
+    super.initState();
+  }
+
+  final _myBox = Hive.box('mybox');
+
+  TheListDatabase db = TheListDatabase();
+
   String currentOption = 'not_interested'; 
 
   bool isEnabled = false;
@@ -104,12 +119,43 @@ class _DialogBoxState extends State<DialogBox> {
     }); 
   }
 
+  String? validator(String? value) {
+    switch(widget.labelName) {
+      case 'Category':
+      if (db.categoryList.isNotEmpty) {
+        for (var category in db.categoryList) {
+          if (value!.isEmpty) {
+            return 'The name cannot be empty.';
+          } else if (category[0] == value) {
+            return 'There is already an existing name in your categories.';
+          } else {
+            return null;
+          }
+        }
+      }
+      case 'Item':
+        if (db.itemsList.isNotEmpty) {
+          for (var item in db.itemsList) {
+            if (value!.isEmpty) {
+              return 'The name cannot be empty.';
+            } else if (item[0] == value && item[0] == widget.cName) {
+              return 'There is already an existing name in your items.';
+            } else {
+              return null;
+            }
+          }
+        }
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.tertiary,
       content: Form(
-        key: widget._formKey,
+        key: _formKey,
         child: SizedBox(
           width: 200,
           height: widget.labelName == 'Category' ? 350 : isEnabled == true ? 330 : 250,
@@ -123,13 +169,15 @@ class _DialogBoxState extends State<DialogBox> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                   child: TextFormField(
-                    validator: (value) => value == "" ? 'The name cannot be empty' : null,
-                    autovalidateMode: AutovalidateMode.always,
+                    validator: validator,
+                    //onChanged: textOnChange,
+                    //autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: widget.controller,
                     decoration: InputDecoration(
                       labelText: '${widget.labelName} Name',
                       hintText: 'Add new ${widget.labelName}',
-                      border: OutlineInputBorder()
+                      border: OutlineInputBorder(),
+                      errorMaxLines: 3
                     ),
                   ),
               ),
@@ -313,7 +361,14 @@ class _DialogBoxState extends State<DialogBox> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // save button
-                    Button(text: "Save", onPressed: widget.onSave),
+                    Button(
+                      text: "Save", 
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          widget.onSave(); // Call the onSave function
+                        }
+                      }
+                    ),
                     // cancel button
                     Button(text: "Cancel", onPressed: widget.onCancel)
                   ],

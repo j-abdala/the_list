@@ -17,7 +17,7 @@ class Button extends StatelessWidget {
       color: Theme.of(context).colorScheme.primary,
       child: Text(
         text, 
-        style: Theme.of(context).textTheme.bodySmall)
+        style: Theme.of(context).textTheme.bodyMedium)
       );
   }
 }

@@ -39,37 +39,21 @@ class NotificationService {
         id, title, body, await notificationDetails());
   }
 
-  // Future scheduleNotification(
-  //     {int id = 0,
-  //     String? title,
-  //     String? body,
-  //     String? payLoad,
-  //     required DateTime scheduledNotificationDate}) async {
-  //   return notificationsPlugin.zonedSchedule(
-  //       id,
-  //       title,
-  //       body,
-  //       tz.TZDateTime.from(
-  //         scheduledNotificationDate,
-  //         tz.local,
-  //       ),
-  //       await notificationDetails(),
-  //       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  //       uiLocalNotificationDateInterpretation:
-  //           UILocalNotificationDateInterpretation.absoluteTime);
-  // }
-
   Future<void> scheduleNotification(DateTime dueDate) async {
   // Set the time to midnight (00:00)
-    DateTime scheduledDate = DateTime(dueDate.year, dueDate.month, dueDate.day, dueDate.hour, dueDate.minute + 2);
-    
-    await notificationsPlugin.zonedSchedule(
-        0,
-        'Reminder!',
-        'You have a task due today!',
-        tz.TZDateTime.from(scheduledDate, tz.local),
-        notificationDetails(),
-        androidScheduleMode: AndroidScheduleMode.exact,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
+    try {
+      DateTime scheduledDate = DateTime(dueDate.year, dueDate.month, dueDate.day, 0, 0);
+      
+      await notificationsPlugin.zonedSchedule(
+          0,
+          'Reminder!',
+          'You have a task due today!',
+          tz.TZDateTime.from(scheduledDate, tz.local),
+          notificationDetails(),
+          androidScheduleMode: AndroidScheduleMode.exact,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 }

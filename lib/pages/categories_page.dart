@@ -53,11 +53,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
       setState(() {
         db.itemsList.add([_controller.text, false, widget.categoryName, GetDateValue.getDate()]);
         if (GetDateValue.getDate() != null) {
-          // notificationScheduler.scheduleNotification(
-          //   title: 'The List',
-          //   body: '${_controller.text} Due date reminder!',
-          //   //scheduledNotificationDate: GetDateValue.getDate()!
-          //   scheduledNotificationDate: DateTime.now().add(Duration(seconds: 12)));
           notificationScheduler.scheduleNotification(DateTime.now());
         }
         _controller.clear();

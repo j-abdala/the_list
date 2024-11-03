@@ -84,13 +84,10 @@ class _HomePageState extends State<HomePage> {
     });
     db.updateDatabase();
   }
-
-  void testNotification() {
-    NotificationService().showNotification(title: 'Test', body: 'test!');
-    print('test');
-  }
-
+  
   // TODO: sharing function
+
+  // TODO: look into including mongodb integration to enable sharing function
 
   @override
   Widget build(BuildContext context) {

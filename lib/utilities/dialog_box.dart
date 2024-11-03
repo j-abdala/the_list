@@ -162,16 +162,13 @@ class _DialogBoxState extends State<DialogBox> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Text(
-              //   widget.labelName == 'Category' ? 'Create a new category' : 'Create a new item', 
-              //   style: Theme.of(context).textTheme.headlineMedium),
               // get user input
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                   child: TextFormField(
                     validator: validator,
                     //onChanged: textOnChange,
-                    //autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: widget.controller,
                     decoration: InputDecoration(
                       labelText: '${widget.labelName} Name',

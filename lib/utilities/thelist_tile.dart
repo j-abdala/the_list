@@ -75,7 +75,6 @@ class TheListTile extends StatelessWidget {
                             )
                           )
                         ]
-                        //dueDate == null ? itemName : '$itemName\nDue: ${dueDate.toString().split(" ")[0]}',
                       ]
                     ),
                   ),

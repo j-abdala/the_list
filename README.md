@@ -15,7 +15,7 @@ The List app is a simple task management tool for android that allows users to a
 - **Backend:** Node.js
 - **Storage:** Local Storage
 - **Framework:** Flutter
-- 
+
 ## Usage
 
 1. To add a task, enter a description in the input field and tap the "Save" button.
